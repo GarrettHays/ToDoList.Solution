@@ -14,6 +14,45 @@ namespace ToDoList.Models
         Id = id;
     }
 
+    public override bool Equals(System.Object otherItem)
+    {
+      if (!(otherItem is Item))
+      {
+        return false;
+      }
+      else
+      {
+        Item newItem = (Item) otherItem;
+        bool descriptionEquality = (this.Description == newItem.Description);
+        return descriptionEquality;
+      }
+    }
+
+    public void Save()
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+
+      // Begin new code
+
+      cmd.CommandText = "INSERT INTO items (description) VALUES (@ItemDescription);";
+      MySqlParameter param = new MySqlParameter();
+      param.ParameterName = "@ItemDescription";
+      param.Value = this.Description;
+      cmd.Parameters.Add(param);    
+      cmd.ExecuteNonQuery();
+      // Id = cmd.LastInsertedId;
+
+      // End new code
+
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+    }
+
     public static List<Item> GetAll()
     {
         List<Item> allItems = new List<Item> { };
