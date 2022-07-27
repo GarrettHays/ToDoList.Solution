@@ -72,11 +72,5 @@ namespace ToDoList.Controllers
         _db.SaveChanges();
         return RedirectToAction("Index");
     }
-
-    public ActionResult Index()
-    {
-        List<Item> model = _db.Items.Include(item => item.Category).ToList();
-        return View(model);
-    }
   }
 }
